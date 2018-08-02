@@ -12,12 +12,14 @@ The major difference is the use of [marked](https://github.com/chjj/marked) for 
 
 1. Clone the repo, install the npm modules.
 2. Run `node marked.js`. In addition, you can refer to the parameters of the following table:
-    | Parameter | Explain |
-    | ---|---|
-    | --i | File input template |
-    | --o | File output |
-    | --p | Path folder includes |
-    | --d | Path folder source `slate_node` |
+
+     Parameter | Explain |
+     ---|---|
+     --i | File input template |
+     --o | File output |
+     --p | Path folder includes |
+     --d | Path folder source `slate_node` |
+
 3. This will build the page and save it to /source/index.html 
 4. You're done! 
 
