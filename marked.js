@@ -22,12 +22,14 @@ const INPUT_KEY='i';
 const OUTPUT_KEY='o';
 const PATH_INCLUDE_KEY='p';
 const DIR_SOURCE_KEY='d';
+const CSS_FILE_KEY='css';
 
 var argv = Minimist(process.argv.slice(2));
 var fileSource = argv[INPUT_KEY] || './source/index.md';
 var fileDestination = argv[OUTPUT_KEY] || './source/index.html';
 var pathInclude = argv[PATH_INCLUDE_KEY] || (__dirname, 'source/includes');
-var dirSource = argv[DIR_SOURCE_KEY] || (__dirname + '/source/');
+var dirSource = argv[DIR_SOURCE_KEY] ? `${argv[DIR_SOURCE_KEY]}/source/` : '';
+var cssFile = argv[CSS_FILE_KEY];
 
 marked.setOptions({
   renderer: new marked.Renderer(),
@@ -74,6 +76,10 @@ fs.readFile(fileSource, 'utf8', function (err, content) {
   var token
   var listName
 
+  if (cssFile) {
+    data.linkCss = cssFile;
+  }
+
   for (var idx = 0; idx < tokens.length; idx++) {
     token = tokens[idx]
     if (token.type === 'list_item_start') {
@@ -109,7 +115,7 @@ fs.readFile(fileSource, 'utf8', function (err, content) {
       Handlebars.registerPartial(includeFileName, markedInclude)
     }
   }
-  fs.readFile('./source/layouts/layout.html', 'utf8', function (err, source) {
+  fs.readFile(`${__dirname}/source/layouts/layout.html`, 'utf8', function (err, source) {
     if (err) console.log(err)
 
     if (data.includes) {

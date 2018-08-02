@@ -12,6 +12,10 @@
     <script src="{{{dirSource}}}javascripts/lib/jquery.min.js"></script>
     <script src="{{{dirSource}}}javascripts/all.js" type="text/javascript"></script>
 
+    {{#if linkCss}}
+      <link href="{{{linkCss}}}" rel="stylesheet" type="text/css" />
+    {{/if}}
+
       <script>
         $(function() {
           var langs = [];
@@ -27,7 +31,7 @@
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="{{{dirSource}}}/images/navbar.png" />
+        <img src="{{{dirSource}}}images/navbar.png" />
       </span>
     </a>
     <div class="tocify-wrapper">

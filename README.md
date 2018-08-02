@@ -19,6 +19,7 @@ The major difference is the use of [marked](https://github.com/chjj/marked) for 
      --o | File output |
      --p | Path folder includes |
      --d | Path folder source `slate_node` |
+     --css | Css file custom |
 
 3. This will build the page and save it to /source/index.html 
 4. You're done! 
