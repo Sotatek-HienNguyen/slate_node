@@ -1,6 +1,8 @@
 ---
 title: API Reference
 
+logo: images/logo.png
+
 language_tabs:
   - shell: cURL
   - ruby: Ruby

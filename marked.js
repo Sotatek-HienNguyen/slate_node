@@ -16,6 +16,18 @@ var fs = require('fs')
 var highlight = require('highlight.js')
 var Handlebars = require('handlebars')
 var path = require('path')
+var Minimist = require('minimist');
+
+const INPUT_KEY='i';
+const OUTPUT_KEY='o';
+const PATH_INCLUDE_KEY='p';
+const DIR_SOURCE_KEY='d';
+
+var argv = Minimist(process.argv.slice(2));
+var fileSource = argv[INPUT_KEY] || './source/index.md';
+var fileDestination = argv[OUTPUT_KEY] || './source/index.html';
+var pathInclude = argv[PATH_INCLUDE_KEY] || (__dirname, 'source/includes');
+var dirSource = argv[DIR_SOURCE_KEY] || (__dirname + '/source/');
 
 marked.setOptions({
   renderer: new marked.Renderer(),
@@ -48,7 +60,7 @@ Handlebars.registerHelper('html', function (content) {
   return new Handlebars.SafeString(content)
 })
 
-fs.readFile('./source/index.md', 'utf8', function (err, content) {
+fs.readFile(fileSource, 'utf8', function (err, content) {
   if (err) console.log(err)
 
   content = content.split(/---/g)
@@ -57,7 +69,7 @@ fs.readFile('./source/index.md', 'utf8', function (err, content) {
     throw new Error('No markdown page settings found!')
   }
 
-  var data = {}
+  var data = {dirSource : dirSource}
   var tokens = new marked.Lexer().lex(content[1])
   var token
   var listName
@@ -87,12 +99,11 @@ fs.readFile('./source/index.md', 'utf8', function (err, content) {
       }
     }
   }
-
   if (data.includes) {
     // create partials
     for (var i = 0; i < data.includes.length; i++) {
       var includeFileName = data.includes[i]
-      var includeFilePath = path.resolve(__dirname, 'source/includes', includeFileName + '.md')
+      var includeFilePath = path.resolve(pathInclude, includeFileName + '.md')
       var includeContent = fs.readFileSync(includeFilePath, {encoding: 'utf8'})
       var markedInclude = marked(includeContent)
       Handlebars.registerPartial(includeFileName, markedInclude)
@@ -114,7 +125,7 @@ fs.readFile('./source/index.md', 'utf8', function (err, content) {
 
     data['content'] = marked(content.slice(2).join(''))
 
-    fs.writeFile('./source/index.html', template(data), function (err) {
+    fs.writeFile(fileDestination, template(data), function (err) {
       if (err) console.log(err)
     })
   })
